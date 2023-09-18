@@ -11,7 +11,7 @@ class Alawi(models.Model):
     product_name = models.CharField(max_length=200)
     payment_sequence = models.CharField(max_length=200)
     amount_to_be_paid = models.IntegerField(default=0000)
-    payment_date = models.DateTimeField(default=now)
+    payment_date = models.DateField(default=now)
     creation_date = models.DateTimeField(default=now)
     initial_deposite = models.IntegerField(default=0000)
     product_balance = models.IntegerField(default=0000) 

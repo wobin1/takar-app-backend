@@ -20,9 +20,29 @@ class Alowance(APIView):
         metadata = {
             "module": "alawi"
         }
+        
+        print("processing payment date")
+
+        # calculating payment sequence
+        if request_data["payment_sequence"] == "Daily":
+            date = datetime.date.today() + datetime.timedelta(days=1)
+            request_data["payment_date"] = date
+            print(request_data["payment_date"] )
+        if request_data["payment_sequence"] == "Weekly":
+            date = datetime.date.today() + datetime.timedelta(days=1)
+            request_data["payment_date"] = date            
+            print(request_data["payment_date"] )
+        if request_data["payment_sequence"] == "Daily":
+            date = datetime.date.today() + datetime.timedelta(days=1)
+            request_data["payment_date"] = date
+            print(request_data["payment_date"] )
+
+        print("payment date processed")       
+
         # process payment
         print(request_data)
-        
+
+        print("saving product data in progress")
         # saving data to database
         serializer = AlawiSerializer(data=request_data)
         if serializer.is_valid(raise_exception=True):
@@ -41,7 +61,7 @@ class Alowance(APIView):
             "amount": request_data["product_amount"],
             "email": userData["userData"]["email"],
             "reference": productData["id"],
-            "callback_url": "http://localhost:4200/app/alawance",
+            "callback_url": "https://takar-app.netlify.app/#/app/alawance",
             "metadata": metadata
         }
 

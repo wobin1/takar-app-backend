@@ -8,6 +8,7 @@ from wallet.models import Wallet
 from user.models import CustomUser
 from rest_framework import status
 from takar.reused_functions import Functions
+import math
 
 class SavingsProduct(APIView):
     
@@ -36,7 +37,7 @@ class SavingsProduct(APIView):
             "amount": request_data["deposite"],
             "email": userData["userData"]["email"],
             "reference": savingsData["id"],
-            "callback_url": "http://localhost:4200/app/savings",
+            "callback_url": "https://takar-app.netlify.app/#/app/savings",
             "metadata": metadata
         }
         print(paymentData)
@@ -78,7 +79,7 @@ class SavingsProduct(APIView):
             for savings in serializer.data:
                 amount_saved = savings["amount_saved"]
                 savings_goal = savings["savings_goal"]
-                percentage = amount_saved/savings_goal * 100
+                percentage = math.ceil(amount_saved/savings_goal * 100)
 
                 print(percentage)
 
