@@ -159,7 +159,8 @@ EMAIL_HOST_PASSWORD = 'ylgorrnotrnqwmlr'
 CORS_ALLOWED_ORIGINS = [
     # Add the allowed origins (domains) for your CORS requests
     'https://a5e2-102-91-46-238.ngrok-free.app',
-    'http://localhost:4200'
+    'http://localhost:4200',
+    'https://takar-app.netlify.app'
 
 ]
 
