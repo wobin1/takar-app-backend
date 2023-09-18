@@ -26,7 +26,7 @@ class Payment():
 
         createUrl = 'https://api.paystack.co/transaction/initialize'
         headers = {
-            'Authorization': f"Bearer {os.getenv('SECRETE')}",
+            'Authorization': "Bearer sk_test_742c225a4a56b8d57d7d45fa57f0b2e77cabc0cc",
             'Content-Type': 'application/json'
         }
 
