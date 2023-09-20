@@ -21,15 +21,20 @@ class WebhookHandler(APIView):
         # print(user.id)
 
         if module == "alawi":
+            print("checking if product exist...")
             product = Alawi.objects.get(pk=reference)
             print(product)
+            print("product exis!")
             
+            print("getting product data")
             product_data = AlawiSerializer(product).data
             product_data["initial_deposite"] = request_data["data"]["amount"]
             product_data["product_balance"] = request_data["data"]["amount"]
             print("below is the product data")
             print(product_data)
+            print("product data gotten!")
 
+            print("saving product Data")
             serializer = AlawiSerializer(product, data=product_data)
             if serializer.is_valid():
                 serializer.save()
@@ -37,21 +42,31 @@ class WebhookHandler(APIView):
             print("below is saved data")
             print(serializer.data)
 
+            print("product Data saved")
+
             return Response({"message": "Product data updated", "data": serializer.data})
 
         elif module == "savings":
+            print("checking if savings data exist")
             savings = Savings.objects.get(pk=reference)
             print(savings)
+            print("savngs product exist!")
             
+            print("getting savings data")
             savings_data = SavingsSerializer(savings).data
             savings_data["savings_amount"] = request_data["data"]["amount"]
             savings_data["amount_saved"] = request_data["data"]["amount"]
             print(savings_data)
 
+            print("savings data gotten!")
+
+            print("saving savings data..")
             serializer = SavingsSerializer(savings, data=savings_data)
             if serializer.is_valid():
                 serializer.save()
 
             print(serializer.data)
+
+            print("savings data saved!")
 
             return Response({"message": "Product data updated", "data": serializer.data})

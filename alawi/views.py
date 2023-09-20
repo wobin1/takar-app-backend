@@ -21,7 +21,7 @@ class Alowance(APIView):
             "module": "alawi"
         }
         
-        print("processing payment date")
+        print("processing payment data...")
 
         # calculating payment sequence
         if request_data["payment_sequence"] == "Daily":
@@ -37,25 +37,30 @@ class Alowance(APIView):
             request_data["payment_date"] = date
             print(request_data["payment_date"] )
 
-        print("payment date processed")       
+        print("payment data processed!")       
 
         # process payment
         print(request_data)
 
-        print("saving product data in progress")
+        print("saving product data...")
         # saving data to database
         serializer = AlawiSerializer(data=request_data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            print("product saved")
+            print("product saved!")
         
+        print("geting saved product data..")
         # getting product data that was saved
         productData = serializer.data
+        print("product saved data got!")
 
+        print("getting user data...")
         # getting user data  payment method from the helper file
         userData = Payment.getUser(request_data["product_owner"])
         print(f"user data: {userData}")
+        print("user Data got!")
 
+        print("generating payment data")
         # generating payment data
         paymentData = {
             "amount": request_data["product_amount"],
@@ -64,11 +69,18 @@ class Alowance(APIView):
             "callback_url": "https://takar-app.netlify.app/#/app/alawance",
             "metadata": metadata
         }
+        
+        print("payment data generated!")
 
+        print("payment in progress...")
         payment_handler = Payment.cardPayment(self, paymentData)
+        print("payment done!")
 
+        print("creating transaction history")
         # creating transaction history
         Functions.saveTransactionHistory(self, "Credit", request_data["product_amount"], "Alawi product " + request_data["product_name"] + "created", request_data["product_owner"] )
+        print("transaction history created!")
+
 
         return Response({"message": "product created successfully!!!", "data": [{"product_data":productData, "payment_data":payment_handler}]})
 

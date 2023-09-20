@@ -6,8 +6,17 @@ from .serializers import WalletSerializer
 from rest_framework import status
 from takar.reused_functions import Functions
 
-
 class Wallets(APIView):
+
+    def post(self, request):
+        request_data = request.data
+
+        print("creating wallet...")
+        Functions.create_wallet(request_data)
+
+        print("wallet created")
+
+        return Response({"message": "Wallet Created Successfully", "data": serializer.data})
 
     def get(self, request):
         try:

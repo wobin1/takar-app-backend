@@ -12,6 +12,10 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 import jwt
+from wallet.views import Wallets
+from wallet.serializers import WalletSerializer
+from takar.reused_functions import Functions
+
 
 
 
@@ -27,7 +31,6 @@ class UserList(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response(str(e))
-
 
 # this class create a user, generate a verification link and send to user email for
 # for account verification.
@@ -47,7 +50,6 @@ class UserCreate(APIView):
         #     print(f"printing exception {e}")
         #     return Response({"message": str(e)})
 
-
         user = CustomUser.objects.get(pk=serializer.data["id"])
 
         print("user querried")
@@ -56,7 +58,8 @@ class UserCreate(APIView):
         token = RefreshToken.for_user(user).access_token
         print(token)
 
-        # generate verification link 
+        # generate verification link
+        print("generating verification url...") 
         current_site = request_data['current_site']
         verification_url = f'{current_site}{token}'
         print("verification url generated")
@@ -64,12 +67,26 @@ class UserCreate(APIView):
         userData= UserSerializer(user).data
 
         userData["verification_token"] = token
-        print(userData)
+        # print(userData)
 
+        print("saving verification token")
         userSerializer = UserSerializer(user, data=userData)
         print("verification token saved")
 
+
+        # this code is creating a wallet for a user.
+        print("creating wallet...")
+        # wallet = WalletSerializer(data = {"user": userSerializer.data.id})
+        # if wallet.is_valid(raise_exception=True):
+        #     wallet.save()
+  
+
+        Functions.create_wallet({"user": serializer.data["id"]})
+
+        print("wallet created!")
+
         # This code is sending email and allowing me to pass a html content
+        print("preparing email data to send")
         subject, from_email, to = "Account Activation", "settings.EMAIL_HOST_USER", request_data["email"]
         text_content = "Click on the link below to verify your email"
         html_content = f"<p>Click on the link below to verify your email <br> <strong><a href={verification_url}> {verification_url} </a></strong>.</p>"

@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from transaction_history.models import History
 from transaction_history.serializers import TransactionSerializer
+from wallet.serializers import WalletSerializer
 import datetime
 
 
@@ -30,3 +31,9 @@ class Functions():
         new_date = datetime.date.strftime(date, format)
 
         return new_date 
+
+
+    def create_wallet(user):
+        serializer = WalletSerializer(data = user)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()

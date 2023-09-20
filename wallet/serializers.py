@@ -9,3 +9,13 @@ class WalletSerializer(serializers.ModelSerializer):
         model = Wallet
         fields = ['id', 'user', 'balance']
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        wallet = Wallet(
+            user = validated_data["user"]
+        )
+
+        wallet.save()
+        return wallet
+
+
